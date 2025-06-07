@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock paper scissors</title>
+    <style>
+        body{
+            background-color: rgb(25, 25, 25);
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .title{
+            font-size: 30px;
+        }
+        .move-icon{
+            height: 80px;
+        }
+        .move-btn{
+            background-color: transparent;
+            /* border: 3px solid white; */
+            width: 120px;
+            height: 120px;
+            /* border-radius: 60px; */
+            border: none;
+            margin: 15px;
+            cursor: pointer;
+        }
+        .result{
+            font-size: 30px;
+        }
+        .score{
+            margin-top: 50px;
+        }
+        .rst-btn,
+        .auto-play-btn{
+            padding: 10px 15px;
+            font-size: 15px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h3 class="title">Rock Paper Scissors</h3>
+
+    <button class="move-btn play-rock"><img src="images/rock.png" class="move-icon"></button>
+    <button class="move-btn play-paper"><img src="images/paper.png" class="move-icon"></button>
+    <button class="move-btn play-scissor" ><img src="images/scissor.png" class="move-icon"></button>
+
+    <br>
+    <hr>
+
+    <h4 class="result"></h4>
+    <p class="moves"></p>
+
+    <p class="score"></p>
+    
+
+    <br>
+
+    <button class="rst-btn">Reset Score</button>
+
+    <button class="auto-play-btn" onclick="
+        autoplay();
+    ">Auto Play</button>
+
+
+
+</body>
+    <script>
+
+        let score = JSON.parse(localStorage.getItem('scores')) || {
+            wins: 0,
+            loses: 0,
+            ties: 0
+        };
+        let isPlaying = false;
+        let intervalID;
+       function autoplay(){
+        if(!isPlaying){
+            intervalID = setInterval(() => {
+            const move = computer_move();
+            play_game(move);
+            }, 1500);//here 1500 is in mili second
+            isPlaying = true;
+        }
+        else{
+            clearInterval(intervalID);
+            isPlaying = false;
+        }
+        if(isPlaying){
+            document.querySelector('.auto-play-btn')
+            .innerText = "Stop Play";
+        }
+        else{
+            document.querySelector('.auto-play-btn')
+            .innerText = "Auto Play";
+        }
+
+            
+       }
+
+
+        function reset_score(){
+            score.wins = 0;
+            score.loses = 0;
+            score.ties = 0;
+            localStorage.removeItem('scores');
+            //console.log('score has been reset');
+            show_score();
+        }
+
+        function show_score(){
+          
+          document.querySelector('.score')
+            .innerText = `Wins:${score.wins}, Loses:${score.loses}, Ties:${score.ties}`;
+        }
+        //for showing current score, after reloading page
+        show_score();
+
+        function computer_move(){
+            let a = Math.floor(Math.random()*10);
+            let comp = "";
+            if(a <= 3.33)
+                comp = "rock";
+            else if(a > 3.33 && a <= 6.66)
+                comp = "paper";
+            else
+                comp = "scissor";
+
+            return comp;
+        }
+
+        function play_game(str){
+            let comp = computer_move();
+            let result = "";
+            if(str === 'rock'){
+                if(comp === 'rock')
+                    result = "tie";
+                else if(comp === 'paper')
+                    result = "you lose";
+                else 
+                    result = "you win";
+            }
+            else if(str === 'paper'){
+                if(comp === 'rock')
+                    result = "you win";
+                else if(comp === 'paper')
+                    result = "tie";
+                else 
+                    result = "you lose";
+            }
+            else{
+                if(comp === 'rock')
+                    result = "you lose";
+                else if(comp === 'paper')
+                    result = "you win";
+                else 
+                    result = "tie";
+            }
+
+
+            if(result === 'you win')
+                score.wins += 1;
+            else if(result === 'you lose')
+                score.loses += 1;
+            else 
+                score.ties += 1;
+
+            localStorage.setItem('scores', JSON.stringify(score));
+            
+            document.querySelector('.result')
+            .innerText = result.toUpperCase();
+
+            document.querySelector('.moves')
+            .innerHTML = `you: <img src="images/${str}.png" class="move-icon">\ncomputer: <img src="images/${comp}.png" class="move-icon">`;
+
+            show_score();
+        }
+        //using addEventListerners instead of onclick attribute
+        document.querySelector('.play-rock')
+        .addEventListener("click" , () => {
+            play_game('rock');
+        });
+        document.querySelector('.play-paper')
+        .addEventListener("click" , () => {
+            play_game('paper');
+        });
+        document.querySelector('.play-scissor')
+        .addEventListener("click" , () => {
+            play_game('scissor');
+        });
+        document.querySelector('.rst-btn')
+        .addEventListener("click" , () => {
+            reset_score();
+        });
+
+        document.body
+        .addEventListener('keydown', (event) => {
+            if(event.key === 'r')
+                play_game('rock');
+            else if(event.key === 'p')
+                play_game('paper');
+            else if(event.key === 's')
+                play_game('scissor');
+            else if(event.key === 'a')
+                autoplay();
+            else if(event.key === 'b')
+                reset_score();
+        })
+        
+  
+    </script>
+</html>

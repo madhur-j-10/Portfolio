@@ -3,3 +3,9 @@
 .bg-red{
     background-color: red;
 }
+
+.gitlogo{
+    width: 40px;
+    height: auto;
+    object-fit: contain;
+}

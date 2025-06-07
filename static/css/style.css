@@ -14,7 +14,7 @@ body{
   padding: 20px;
 }
 header {
-  background: #24292e;
+  background: #3c3f42;
   color: white;
   padding: 20px 0px;
 }
@@ -30,7 +30,8 @@ nav a {
   text-decoration: none;
 }
 
-nav a:hover {
+nav a:hover,
+li a:hover{
   text-decoration: underline;
 }
 
@@ -38,9 +39,28 @@ nav a:hover {
 main .intro{
   background-color: white;
   padding: 30px;
-  border-radius: 15px;
   margin-top: 40px;
+  border-radius: 15px;
   box-shadow:2px 5px 10px 3px rgba(0,0,0,0.3)
+}
+
+main .work{
+  background-color: rgb(202, 170, 170);
+  padding: 30px;
+  margin-top: 70px;
+  border-radius: 15px;
+  box-shadow:2px 5px 10px 3px rgba(0,0,0,0.3)
+}
+
+main .projects{
+  list-style-type: none;
+  font-weight: bold;
+}
+
+li a{
+  text-decoration: none;
+  margin-right: 15px;
+  margin-left: 15px;
 }
 
 

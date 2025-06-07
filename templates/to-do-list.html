@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To Do List</title>
+    <style>
+        body{
+            background-color: rgb(25,25,25);
+            color: white;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+        }
+        .add-btn{
+            background-color: rgb(58, 239, 58);
+            border: none;
+            font-size: large;
+            padding: 10px 15px;
+            cursor: pointer;
+        }
+        .delete-btn{
+            background-color: rgb(158, 22, 22);
+            border: none;
+            color: white;
+            font-size: 15px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+        .ip-bar,
+        .duedate{
+            font-size: 15px;
+            padding: 7px;
+        }
+        
+        .todo-grid,
+        .inp-grid{
+            display: grid;
+            grid-template-columns: 200px 150px 100px;
+            column-gap: 10px;
+            row-gap: 10px;
+            margin-bottom: 10px;
+            /* align-items: center; */
+        }
+        
+    </style>
+</head>
+<body>
+    <h3>To Do List</h3>
+    <div class="inp-grid">
+        <input type="text" placeholder="Tasks" class="input-txt ip-bar">
+        <input type="date" class="due-date">
+        <button class="add-btn">Add</button>
+    </div>
+
+    <div class="todo-list todo-grid"></div>
+
+</body>
+    <script>
+        //array of object storing task(key) and duedate(key)
+        let todolist = [
+        //   {task: "make dinner",duedate:"22-3-2025"},
+        //   {task: "eat dinner",duedate:"22-4-2025"},
+        //   {task: "wash dished",duedate:"2-3-2025"}
+        ];
+
+        function addToDo(){
+            let inp = document.querySelector('.input-txt');
+            let due = document.querySelector('.due-date');
+            //push the input values to array
+            todolist.push({task:inp.value,
+                duedate:due.value});
+            //reset text in text box and calender
+            inp.value = "";
+            due.value = "";
+            //show array
+            console.log(todolist);
+            renderhtml();
+        }
+
+         function renderhtml(){
+            let insideHtml = "";
+            /*
+            for(let i=0; i<todolist.length; i++){
+
+                const html =   `
+                    <div>${todolist[i].task}</div>
+                    <div>${todolist[i].duedate}</div>
+                    <button onclick="
+                            todolist.splice(${i},1);
+                            renderhtml();
+                        " class="delete-btn">Delete</button>  
+                    
+                `;
+                insideHtml += html; 
+            }
+            */
+            //using forEach loop instead of normal for loop!
+            todolist.forEach(function(val, i){
+                const html =   `
+                    <div>${todolist[i].task}</div>
+                    <div>${todolist[i].duedate}</div>
+                    <button onclick="
+                            todolist.splice(${i},1);
+                            renderhtml();
+                        " class="delete-btn">Delete</button>   
+                `;
+                insideHtml += html;
+            })
+
+            //div
+            document.querySelector('.todo-list')
+            .innerHTML = insideHtml;
+
+             console.log(insideHtml);
+
+        }
+
+
+
+        //using addEventListener instead of onclick,onkeydown attribute
+        document.querySelector('.add-btn')
+        .addEventListener("click", function() {
+            addToDo();
+        });
+        document.querySelector('.ip-bar')
+        .addEventListener("keydown", function(event) {
+            if(event.key === 'Enter')
+                addToDo();
+            // console.log(event.key);
+        });
+
+        renderhtml();
+
+    </script>
+</html>
